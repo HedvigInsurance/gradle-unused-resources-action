@@ -15,14 +15,9 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/actions/typescript-action.git"
+    "url": "git+https://github.com/HedvigInsurance/gradle-unused-resources-action"
   },
-  "keywords": [
-    "actions",
-    "node",
-    "setup"
-  ],
-  "author": "",
+  "author": "Oscar Nylander",
   "license": "MIT",
   "dependencies": {
     "@actions/core": "^1.6.0",
