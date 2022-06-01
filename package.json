@@ -1,8 +1,8 @@
 {
-  "name": "typescript-action",
-  "version": "0.0.0",
+  "name": "gradle-unused-resources-action",
+  "version": "0.0.1",
   "private": true,
-  "description": "TypeScript template action",
+  "description": "Action to run `gradle-unused-resources-remover-plugin`",
   "main": "lib/main.js",
   "scripts": {
     "build": "tsc",

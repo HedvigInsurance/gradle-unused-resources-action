@@ -1,8 +1,8 @@
 import * as fs from 'fs-extra'
-import { vol } from 'memfs'
-import { it, jest, expect, beforeEach } from '@jest/globals'
-import { appendPluginImportToBuildGradleFile } from '../src/append-plugin-import-to-build-gradle-file'
-import { removeAppendedPluginImport } from '../src/remove-appended-plugin-import'
+import {vol} from 'memfs'
+import {it, jest, expect, beforeEach} from '@jest/globals'
+import {appendPluginImportToBuildGradleFile} from '../src/append-plugin-import-to-build-gradle-file'
+import {removeAppendedPluginImport} from '../src/remove-appended-plugin-import'
 
 jest.mock('fs')
 
@@ -15,19 +15,19 @@ buildscript {
 `
 
 beforeEach(() => {
-    vol.reset()
-    vol.mkdirSync(".", { recursive: true })
+  vol.reset()
+  vol.mkdirSync('.', {recursive: true})
 })
 
 it('should leave file system as it previously was', async () => {
-    await fs.writeFile("./build.gradle.kts", MOCK_BUILD_GRADLE_KTS)
+  await fs.writeFile('./build.gradle.kts', MOCK_BUILD_GRADLE_KTS)
 
-    const { oldBuildGradleKtsContent } = await appendPluginImportToBuildGradleFile()
-    await removeAppendedPluginImport(oldBuildGradleKtsContent)
+  const {oldBuildGradleKtsContent} = await appendPluginImportToBuildGradleFile()
+  await removeAppendedPluginImport(oldBuildGradleKtsContent)
 
-    const buildGradleKts = (await fs.readFile('./build.gradle.kts')).toString()
-    const unusedGradleKtsExists = await fs.pathExists('./unused.gradle.kts')
+  const buildGradleKts = (await fs.readFile('./build.gradle.kts')).toString()
+  const unusedGradleKtsExists = await fs.pathExists('./unused.gradle.kts')
 
-    expect(buildGradleKts).toEqual(MOCK_BUILD_GRADLE_KTS)
-    expect(unusedGradleKtsExists).toBeFalsy()
+  expect(buildGradleKts).toEqual(MOCK_BUILD_GRADLE_KTS)
+  expect(unusedGradleKtsExists).toBeFalsy()
 })
