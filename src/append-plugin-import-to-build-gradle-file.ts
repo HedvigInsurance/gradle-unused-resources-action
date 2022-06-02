@@ -21,10 +21,10 @@ interface AppendPluginImportToBuildGradleFileResult {
 export const appendPluginImportToBuildGradleFile =
   async (): Promise<AppendPluginImportToBuildGradleFileResult> => {
     const oldBuildGradleKtsContent = (
-      await fs.readFile('./build.gradle.kts')
+      await fs.readFile('build.gradle.kts')
     ).toString()
-    await fs.appendFile('./build.gradle.kts', APPLY_IMPORT)
-    await fs.writeFile('./unused.gradle.kts', UNUSED_FILE_CONTENTS)
+    await fs.appendFile('build.gradle.kts', APPLY_IMPORT)
+    await fs.writeFile('unused.gradle.kts', UNUSED_FILE_CONTENTS)
 
     return {
       oldBuildGradleKtsContent

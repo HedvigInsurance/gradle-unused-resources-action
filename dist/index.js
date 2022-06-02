@@ -50,9 +50,9 @@ buildscript {
 apply<com.github.konifar.gradle.remover.UnusedResourcesRemoverPlugin>()
 `;
 const appendPluginImportToBuildGradleFile = () => __awaiter(void 0, void 0, void 0, function* () {
-    const oldBuildGradleKtsContent = (yield fs.readFile('./build.gradle.kts')).toString();
-    yield fs.appendFile('./build.gradle.kts', APPLY_IMPORT);
-    yield fs.writeFile('./unused.gradle.kts', UNUSED_FILE_CONTENTS);
+    const oldBuildGradleKtsContent = (yield fs.readFile('build.gradle.kts')).toString();
+    yield fs.appendFile('build.gradle.kts', APPLY_IMPORT);
+    yield fs.writeFile('unused.gradle.kts', UNUSED_FILE_CONTENTS);
     return {
         oldBuildGradleKtsContent
     };
