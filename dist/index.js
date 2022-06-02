@@ -200,7 +200,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.runPlugin = void 0;
 const exec = __importStar(__nccwpck_require__(1514));
 const runPlugin = () => __awaiter(void 0, void 0, void 0, function* () {
-    exec.exec('./gradlew removeUnusedResources');
+    yield exec.exec('./gradlew removeUnusedResources');
 });
 exports.runPlugin = runPlugin;
 
