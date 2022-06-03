@@ -66,7 +66,9 @@ const appendPluginImportToBuildGradleFile = (buildGradlePath, unusedPluginAppend
     yield fs.appendFile(buildGradlePath, language === 'kotlinscript'
         ? applyImportKts(unusedPluginAppendPath)
         : applyImportGroovy(unusedPluginAppendPath));
-    yield fs.writeFile(unusedPluginAppendPath, language === 'kotlinscript' ? UNUSED_FILE_CONTENTS_KTS : UNUSED_FILE_CONTENTS_GROOVY);
+    yield fs.writeFile(unusedPluginAppendPath, language === 'kotlinscript'
+        ? UNUSED_FILE_CONTENTS_KTS
+        : UNUSED_FILE_CONTENTS_GROOVY);
     return {
         oldBuildGradleContent
     };
@@ -239,8 +241,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.runPlugin = void 0;
 const exec = __importStar(__nccwpck_require__(1514));
+const process = __importStar(__nccwpck_require__(1765));
 const runPlugin = () => __awaiter(void 0, void 0, void 0, function* () {
-    yield exec.exec('./gradlew removeUnusedResources');
+    yield exec.exec(`${process.platform !== 'win32' ? './' : ''}gradlew removeUnusedResources`);
 });
 exports.runPlugin = runPlugin;
 
@@ -6915,6 +6918,14 @@ module.exports = require("os");
 
 "use strict";
 module.exports = require("path");
+
+/***/ }),
+
+/***/ 1765:
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("process");
 
 /***/ }),
 
