@@ -1,105 +1,38 @@
-<p align="center">
-  <a href="https://github.com/actions/typescript-action/actions"><img alt="typescript-action status" src="https://github.com/actions/typescript-action/workflows/build-test/badge.svg"></a>
-</p>
+# gradle-unused-resources-action
 
-# Create a JavaScript Action using TypeScript
+Remove unused resources with Github Actions.
 
-Use this template to bootstrap the creation of a TypeScript action.:rocket:
+Powered by https://github.com/konifar/gradle-unused-resources-remover-plugin
 
-This template includes compilation support, tests, a validation workflow, publishing, and versioning guidance.  
+## Prerequisites
 
-If you are new, there's also a simpler introduction.  See the [Hello World JavaScript Action](https://github.com/actions/hello-world-javascript-action)
+Your repository must be checked out, Java must be set up, and you must have the gradle wrapper present in your project.
 
-## Create an action from this template
+## Inputs
 
-Click the `Use this Template` and provide the new repo details for your action
+- `root-build-gradle-file`
+  Path to your root build.gradle-file.
+  Defaults to `build.gradle.kts`.
 
-## Code in Main
+## Example usage
 
-> First, you'll need to have a reasonably modern version of `node` handy. This won't work with versions older than 9, for instance.
+```yml
+name: Example unused resource action
 
-Install the dependencies  
-```bash
-$ npm install
+on:
+  schedule:
+    - cron: "30 9 * * 0-5" # Run at 9:30 Monday-Friday
+
+jobs:
+  unused_resources:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-java@v3.3.0
+        with:
+          java-version: 11
+          distribution: zulu
+      # ...
+      - uses: hedviginsurance/gradle-unused-resources-action@v0.1.3
+      - uses: peter-evans/create-pull-request@v4 # Create a PR if there were any unused resources
 ```
-
-Build the typescript and package it for distribution
-```bash
-$ npm run build && npm run package
-```
-
-Run the tests :heavy_check_mark:  
-```bash
-$ npm test
-
- PASS  ./index.test.js
-  ✓ throws invalid number (3ms)
-  ✓ wait 500 ms (504ms)
-  ✓ test runs (95ms)
-
-...
-```
-
-## Change action.yml
-
-The action.yml defines the inputs and output for your action.
-
-Update the action.yml with your name, description, inputs and outputs for your action.
-
-See the [documentation](https://help.github.com/en/articles/metadata-syntax-for-github-actions)
-
-## Change the Code
-
-Most toolkit and CI/CD operations involve async operations so the action is run in an async function.
-
-```javascript
-import * as core from '@actions/core';
-...
-
-async function run() {
-  try { 
-      ...
-  } 
-  catch (error) {
-    core.setFailed(error.message);
-  }
-}
-
-run()
-```
-
-See the [toolkit documentation](https://github.com/actions/toolkit/blob/master/README.md#packages) for the various packages.
-
-## Publish to a distribution branch
-
-Actions are run from GitHub repos so we will checkin the packed dist folder. 
-
-Then run [ncc](https://github.com/zeit/ncc) and push the results:
-```bash
-$ npm run package
-$ git add dist
-$ git commit -a -m "prod dependencies"
-$ git push origin releases/v1
-```
-
-Note: We recommend using the `--license` option for ncc, which will create a license file for all of the production node modules used in your project.
-
-Your action is now published! :rocket: 
-
-See the [versioning documentation](https://github.com/actions/toolkit/blob/master/docs/action-versioning.md)
-
-## Validate
-
-You can now validate the action by referencing `./` in a workflow in your repo (see [test.yml](.github/workflows/test.yml))
-
-```yaml
-uses: ./
-with:
-  milliseconds: 1000
-```
-
-See the [actions tab](https://github.com/actions/typescript-action/actions) for runs of this action! :rocket:
-
-## Usage:
-
-After testing you can [create a v1 tag](https://github.com/actions/toolkit/blob/master/docs/action-versioning.md) to reference the stable and latest V1 action
