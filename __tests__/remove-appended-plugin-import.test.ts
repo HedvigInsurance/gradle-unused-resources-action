@@ -22,8 +22,17 @@ beforeEach(() => {
 it('should leave file system as it previously was', async () => {
   await fs.writeFile('./build.gradle.kts', MOCK_BUILD_GRADLE_KTS)
 
-  const {oldBuildGradleKtsContent} = await appendPluginImportToBuildGradleFile()
-  await removeAppendedPluginImport(oldBuildGradleKtsContent)
+  const {oldBuildGradleContent: oldBuildGradleKtsContent} =
+    await appendPluginImportToBuildGradleFile(
+      'build.gradle.kts',
+      'unused.gradle.kts',
+      'kotlinscript'
+    )
+  await removeAppendedPluginImport(
+    oldBuildGradleKtsContent,
+    'build.gradle.kts',
+    'unused.gradle.kts'
+  )
 
   const buildGradleKts = (await fs.readFile('./build.gradle.kts')).toString()
   const unusedGradleKtsExists = await fs.pathExists('./unused.gradle.kts')

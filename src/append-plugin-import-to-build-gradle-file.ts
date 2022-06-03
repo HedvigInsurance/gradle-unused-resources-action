@@ -1,10 +1,15 @@
 import * as fs from 'fs-extra'
+import {BuildGradleFileLanguage} from './build-gradle-file-language'
 
-const APPLY_IMPORT = `
-apply(from="unused.gradle.kts")
+const applyImportKts = (path: string): string => `
+apply(from="${path}")
 `
 
-const UNUSED_FILE_CONTENTS = `
+const applyImportGroovy = (path: string): string => `
+apply from: ${path}
+`
+
+const UNUSED_FILE_CONTENTS_KTS = `
 buildscript {
   repositories {
       gradlePluginPortal()
@@ -14,19 +19,40 @@ buildscript {
 apply<com.github.konifar.gradle.remover.UnusedResourcesRemoverPlugin>()
 `
 
+const UNUSED_FILE_CONTENTS_GROOVY = `
+buildscript {
+  repositories {
+      gradlePluginPortal()
+  }
+  dependencies { classpath "gradle.plugin.com.github.konifar.gradle:plugin:0.3.3" }
+}
+apply plugin: com.github.konifar.gradle.remover.UnusedResourcesRemoverPlugin
+`
+
 interface AppendPluginImportToBuildGradleFileResult {
-  oldBuildGradleKtsContent: string
+  oldBuildGradleContent: string
 }
 
-export const appendPluginImportToBuildGradleFile =
-  async (): Promise<AppendPluginImportToBuildGradleFileResult> => {
-    const oldBuildGradleKtsContent = (
-      await fs.readFile('build.gradle.kts')
-    ).toString()
-    await fs.appendFile('build.gradle.kts', APPLY_IMPORT)
-    await fs.writeFile('unused.gradle.kts', UNUSED_FILE_CONTENTS)
+export const appendPluginImportToBuildGradleFile = async (
+  buildGradlePath: string,
+  unusedPluginAppendPath: string,
+  language: BuildGradleFileLanguage
+): Promise<AppendPluginImportToBuildGradleFileResult> => {
+  const oldBuildGradleContent = (await fs.readFile(buildGradlePath)).toString()
+  await fs.appendFile(
+    buildGradlePath,
+    language === 'kotlinscript'
+      ? applyImportKts(unusedPluginAppendPath)
+      : applyImportGroovy(unusedPluginAppendPath)
+  )
+  await fs.writeFile(
+    unusedPluginAppendPath,
+    language === 'kotlinscript'
+      ? UNUSED_FILE_CONTENTS_KTS
+      : UNUSED_FILE_CONTENTS_GROOVY
+  )
 
-    return {
-      oldBuildGradleKtsContent
-    }
+  return {
+    oldBuildGradleContent
   }
+}

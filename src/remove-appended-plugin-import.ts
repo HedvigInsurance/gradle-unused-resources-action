@@ -1,8 +1,10 @@
 import * as fs from 'fs-extra'
 
 export const removeAppendedPluginImport = async (
-  oldBuildGradleKtsContent: string
+  oldBuildGradleContent: string,
+  buildGradlePath: string,
+  unusedPluginAppendPath: string
 ): Promise<void> => {
-  await fs.writeFile('./build.gradle.kts', oldBuildGradleKtsContent)
-  await fs.remove('./unused.gradle.kts')
+  await fs.writeFile(buildGradlePath, oldBuildGradleContent)
+  await fs.remove(unusedPluginAppendPath)
 }

@@ -1,6 +1,11 @@
 name: 'gradle-unused-resources-action'
 description: 'Action to run `gradle-unused-resources-remover-plugin`'
 author: '@HedvigInsurance'
+inputs:
+  root-build-gradle-file:
+    description: "The path to the root `build.gradle{.kts}`-file of your project."
+    required: false
+    default: 'build.gradle.kts'
 runs:
   using: 'node16'
   main: 'dist/index.js'

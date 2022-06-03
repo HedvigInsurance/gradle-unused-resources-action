@@ -21,7 +21,11 @@ beforeEach(() => {
 it('should append required module configuration correctly', async () => {
   await fs.writeFile('./build.gradle.kts', MOCK_BUILD_GRADLE_KTS)
 
-  await appendPluginImportToBuildGradleFile()
+  await appendPluginImportToBuildGradleFile(
+    'build.gradle.kts',
+    'unused.gradle.kts',
+    'kotlinscript'
+  )
 
   const buildGradleKts = (await fs.readFile('./build.gradle.kts')).toString()
   const unusedGradleKts = (await fs.readFile('./unused.gradle.kts')).toString()
