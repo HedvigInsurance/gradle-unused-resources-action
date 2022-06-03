@@ -142,12 +142,18 @@ const uuid_1 = __nccwpck_require__(5840);
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const buildGradlePath = core.getInput('root-build-gradle-file');
-            const language = (0, build_gradle_file_language_1.buildGradleFileLanguage)(buildGradlePath);
-            const unusedPluginAppendPath = `unused-${(0, uuid_1.v4)()}.gradle${language === 'kotlinscript' ? '.kts' : ''}`;
-            const { oldBuildGradleContent } = yield (0, append_plugin_import_to_build_gradle_file_1.appendPluginImportToBuildGradleFile)(buildGradlePath, unusedPluginAppendPath, language);
-            yield (0, run_plugin_1.runPlugin)();
-            yield (0, remove_appended_plugin_import_1.removeAppendedPluginImport)(oldBuildGradleContent, buildGradlePath, unusedPluginAppendPath);
+            const skipPlugin = core.getInput('skip-plugin');
+            if (!skipPlugin) {
+                const buildGradlePath = core.getInput('root-build-gradle-file');
+                const language = (0, build_gradle_file_language_1.buildGradleFileLanguage)(buildGradlePath);
+                const unusedPluginAppendPath = `unused-${(0, uuid_1.v4)()}.gradle${language === 'kotlinscript' ? '.kts' : ''}`;
+                const { oldBuildGradleContent } = yield (0, append_plugin_import_to_build_gradle_file_1.appendPluginImportToBuildGradleFile)(buildGradlePath, unusedPluginAppendPath, language);
+                yield (0, run_plugin_1.runPlugin)();
+                yield (0, remove_appended_plugin_import_1.removeAppendedPluginImport)(oldBuildGradleContent, buildGradlePath, unusedPluginAppendPath);
+            }
+            else {
+                (0, run_plugin_1.runPlugin)();
+            }
         }
         catch (error) {
             if (error instanceof Error)

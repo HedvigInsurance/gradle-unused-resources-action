@@ -7,22 +7,27 @@ import {v4 as uuidv4} from 'uuid'
 
 async function run(): Promise<void> {
   try {
-    const buildGradlePath = core.getInput('root-build-gradle-file')
-    const language = buildGradleFileLanguage(buildGradlePath)
-    const unusedPluginAppendPath = `unused-${uuidv4()}.gradle${
-      language === 'kotlinscript' ? '.kts' : ''
-    }`
-    const {oldBuildGradleContent} = await appendPluginImportToBuildGradleFile(
-      buildGradlePath,
-      unusedPluginAppendPath,
-      language
-    )
-    await runPlugin()
-    await removeAppendedPluginImport(
-      oldBuildGradleContent,
-      buildGradlePath,
-      unusedPluginAppendPath
-    )
+    const skipPlugin = core.getInput('skip-plugin')
+    if (!skipPlugin) {
+      const buildGradlePath = core.getInput('root-build-gradle-file')
+      const language = buildGradleFileLanguage(buildGradlePath)
+      const unusedPluginAppendPath = `unused-${uuidv4()}.gradle${
+        language === 'kotlinscript' ? '.kts' : ''
+      }`
+      const {oldBuildGradleContent} = await appendPluginImportToBuildGradleFile(
+        buildGradlePath,
+        unusedPluginAppendPath,
+        language
+      )
+      await runPlugin()
+      await removeAppendedPluginImport(
+        oldBuildGradleContent,
+        buildGradlePath,
+        unusedPluginAppendPath
+      )
+    } else {
+      runPlugin()
+    }
   } catch (error) {
     if (error instanceof Error) core.setFailed(error.message)
   }

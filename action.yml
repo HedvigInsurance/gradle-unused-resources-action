@@ -6,6 +6,10 @@ inputs:
     description: "The path to the root `build.gradle{.kts}`-file of your project."
     required: false
     default: 'build.gradle.kts'
+  skip-plugin:
+    description: "Set to true to not have the action temporarily add the plugin before attempting to run."
+    required: false
+    default: false
 runs:
   using: 'node16'
   main: 'dist/index.js'
